@@ -1,20 +1,27 @@
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
+
+const SRC_DIR = path.join(__dirname, '/client/src');
+const DIST_DIR = path.join(__dirname, '/client/dist');
 
 module.exports = {
-  entry: './client/src/index.jsx',
-  mode: 'development',
+  entry: `${SRC_DIR}/index.jsx`,
   output: {
     filename: 'bundle.js',
-    path: path.resolve('dist'),
-    publicPath: '/',
+    path: DIST_DIR,
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.jsx?/,
         exclude: /node_modules/,
-        use: 'babel-loader',
+        use: {
+          loader: 'babel-loader',
+        },
       },
     ],
   },
+  plugins: [
+    new Dotenv(),
+  ],
 };
