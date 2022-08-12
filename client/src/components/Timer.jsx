@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Settings from './Settings.jsx';
 
 const styles = {
   container: {
@@ -8,26 +9,30 @@ const styles = {
     width: '100%',
   },
   h2: {
-    color: '#dfe1e6',
-    fontSize: '40px',
+    color: '#dad7cd',
+    fontSize: '60px',
     marginBottom: '10px',
+    marginTop: '10px',
+    fontFamily: 'sans-sarif',
+    fontWeight: 'lighter',
   },
   timeBox: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: '#f88778',
+    backgroundColor: '#3a5a40',
     width: '40%',
     border: 'solid',
     borderRadius: '10px',
   },
   timeContainer: {
-    fontSize: '80px',
-    marginBottom: '100px',
+    fontSize: '100px',
+    marginBottom: '90px',
     marginTop: '20px',
-    fontFamily: 'arial',
   },
   time: {
+    fontFamily: 'sans-sarif',
+    fontWeight: 'bold',
   },
   buttonContainer: {
     display: 'flex',
@@ -42,12 +47,16 @@ const styles = {
     height: '40px',
     fontSize: '30px',
     cursor: 'pointer',
-    backgroundColor: '#d0d2d6',
+    backgroundColor: '#dad7cd',
+    fontFamily: 'sans-sarif',
+    fontWeight: 'lighter',
   },
   session: {
-    color: '#d0d2d6',
+    color: '#dad7cd',
     fontSize: '30px',
     margin: '20px',
+    fontFamily: 'sans-sarif',
+    fontWeight: 'lighter',
   },
 };
 
@@ -57,7 +66,8 @@ export default function Timer() {
   const [isActive, setIsActive] = useState(false);
   const [counter, setCounter] = useState(10);
   const [onBreak, setOnBreak] = useState(false);
-  const [session, setSession] = useState(1);
+  const [session, setSession] = useState(3);
+  const [status, setStatus] = useState('Study');
 
   function stopTimer() {
     setIsActive(false);
@@ -68,10 +78,19 @@ export default function Timer() {
 
   function buildTimer(isOnBreak) {
     if (isOnBreak) {
-      setCounter(5);
-      setSecond('05');
-      setMinute('00');
+      if (session % 4 === 0) {
+        setStatus('Long Break');
+        setCounter(5);
+        setSecond('05');
+        setMinute('00');
+      } else {
+        setStatus('Short Break');
+        setCounter(3);
+        setSecond('03');
+        setMinute('00');
+      }
     } else {
+      setStatus('Study');
       setCounter(10);
       setSecond('10');
       setMinute('00');
@@ -82,25 +101,37 @@ export default function Timer() {
   useEffect(() => {
     let intervalId;
 
-    if (counter < -1) {
-      setIsActive(false);
-      setOnBreak(!onBreak);
-      buildTimer(!onBreak);
-    }
-
     if (isActive) {
-      intervalId = setInterval(() => {
-        const secondCounter = counter % 60;
-        const minuteCounter = Math.floor(counter / 60);
+      if (counter < -1) {
+        setIsActive(false);
+        setOnBreak(!onBreak);
+        buildTimer(!onBreak);
+      } else {
+        if (onBreak) {
+          setStatus('AFK...');
+        } else {
+          setStatus('Studying...');
+        }
 
-        const computedSecond = String(secondCounter).length === 1 ? `0${secondCounter}` : secondCounter;
-        const computedMinute = String(minuteCounter).length === 1 ? `0${minuteCounter}` : minuteCounter;
+        intervalId = setInterval(() => {
+          const secondCounter = counter % 60;
+          const minuteCounter = Math.floor(counter / 60);
 
-        setSecond(computedSecond);
-        setMinute(computedMinute);
+          const computedSecond = String(secondCounter).length === 1 ? `0${secondCounter}` : secondCounter;
+          const computedMinute = String(minuteCounter).length === 1 ? `0${minuteCounter}` : minuteCounter;
 
-        setCounter(counter - 1);
-      }, 1000);
+          setSecond(computedSecond);
+          setMinute(computedMinute);
+
+          setCounter(counter - 1);
+        }, 1000);
+      }
+    } else if (!isActive) {
+      if (onBreak) {
+        setStatus(`${status} Time!`);
+      } else {
+        setStatus('Study Time!');
+      }
     }
 
     return () => clearInterval(intervalId);
@@ -109,7 +140,7 @@ export default function Timer() {
   return (
     <div className="container" style={styles.container}>
       <h2 style={styles.h2}>
-        {onBreak ? 'Break Time!' : 'Study Time!'}
+        {status}
       </h2>
       <div style={styles.timeBox}>
         <div className="time" style={styles.timeContainer}>
@@ -127,7 +158,6 @@ export default function Timer() {
       <div style={styles.session}>
         {`You're on session number ${session}!`}
       </div>
-      {counter}
     </div>
   );
 }
