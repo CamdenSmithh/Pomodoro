@@ -53,9 +53,15 @@ export default function Settings({ settings, setSettings }) {
 
   function handleSubmit(event) {
     event.preventDefault();
+    document.body.style.overflow = 'auto';
     console.log(event.target.minutes.value);
     console.log(event.target.seconds.value);
     // setSettings(false);
+  }
+
+  function handleClose() {
+    document.body.style.overflow = 'auto';
+    setSettings(false);
   }
 
   useEffect(() => {
@@ -67,7 +73,7 @@ export default function Settings({ settings, setSettings }) {
       <div style={styles.modalOverlay} />
       <div style={styles.modalContainer}>
         <form onSubmit={(event) => handleSubmit(event)}>
-          <button type="button" onClick={() => { setSettings(false); }} style={styles.xBtn}>
+          <button type="button" onClick={() => { handleClose(); }} style={styles.xBtn}>
             X
           </button>
           <div style={styles.modalItems}>
@@ -82,7 +88,7 @@ export default function Settings({ settings, setSettings }) {
             <button type="submit" style={styles.submitBtn}>
               Submit
             </button>
-            <button type="button" onClick={() => { setSettings(false); }} style={styles.cancelBtn}>
+            <button type="button" onClick={() => { handleClose(); }} style={styles.cancelBtn}>
               Cancel
             </button>
           </div>

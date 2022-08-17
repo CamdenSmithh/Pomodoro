@@ -107,7 +107,7 @@ export default function Timer() {
         buildTimer(!onBreak);
       } else {
         if (onBreak) {
-          setStatus('AFK...');
+          setStatus('afk...');
         } else {
           setStatus('Studying...');
         }

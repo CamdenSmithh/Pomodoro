@@ -24,6 +24,17 @@ const styles = {
     fontSize: '20px',
     cursor: 'pointer',
   },
+  pomodoroTechnique: {
+    marginTop: '45px',
+    fontSize: '38px',
+    textAlign: 'center',
+  },
+  pomodoroDescription: {
+    textAlign: 'center',
+    fontSize: '40px',
+    marginTop: '150px',
+    marginBottom: '100px',
+  },
 };
 
 export default function App() {
@@ -40,7 +51,17 @@ export default function App() {
         </button>
       </div>
       <Timer />
-      <Settings settings={settings} />
+      <Settings settings={settings} setSettings={(state) => { setSettings(state); }} />
+      <div style={styles.pomodoroTechnique}>
+        What is the Pomodoro Technique?
+        <br />
+        |
+        <br />
+        V
+      </div>
+      <div style={styles.pomodoroDescription}>
+        The Pomodoro Technique is a time management system that encourages people to work with the time they have—rather than against it. Using this method, you break your workday into 25-minute chunks separated by five-minute breaks. These intervals are referred to as pomodoros. After about four pomodoros, you take a longer break of about 15 to 20 minutes.
+      </div>
     </div>
   );
 }
