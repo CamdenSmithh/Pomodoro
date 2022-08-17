@@ -9,8 +9,8 @@ const styles = {
     transform: 'translate(-50%, -50%',
     backgroundColor: '#EDEDE9',
     padding: '50px',
-    height: '75%',
-    width: '50%',
+    height: '50%',
+    width: '20%',
     zIndex: 1000,
   },
   modalOverlay: {
@@ -23,12 +23,16 @@ const styles = {
     zIndex: 1000,
   },
   modalItems: {
-    overflowY: 'scroll',
+    // overflowY: 'scroll',
     maxWidth: '100%',
     maxHeight: '40vh',
     padding: '2rem',
   },
-  xReviewBtn: {
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+  },
+  xBtn: {
     marginTop: '2px',
     marginRight: '2px',
     position: 'absolute',
@@ -36,16 +40,23 @@ const styles = {
     right: '0',
     cursor: 'pointer',
   },
-  cancelReviewBtn: {
+  cancelBtn: {
     cursor: 'pointer',
   },
-  submitReviewBtn: {
+  submitBtn: {
     cursor: 'pointer',
   },
 };
 
-export default function Settings({ settings }) {
+export default function Settings({ settings, setSettings }) {
   if (!settings) return null;
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    console.log(event.target.minutes.value);
+    console.log(event.target.seconds.value);
+    // setSettings(false);
+  }
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -54,14 +65,27 @@ export default function Settings({ settings }) {
   return (
     <>
       <div style={styles.modalOverlay} />
-      <div>
-        <form>
-          <button type="button">
-            Cancel
+      <div style={styles.modalContainer}>
+        <form onSubmit={(event) => handleSubmit(event)}>
+          <button type="button" onClick={() => { setSettings(false); }} style={styles.xBtn}>
+            X
           </button>
-          <button type="submit">
-            Submit
-          </button>
+          <div style={styles.modalItems}>
+            Minutes:
+            <input type="number" name="minutes" />
+            <br />
+            <br />
+            Seconds:
+            <input type="number" name="seconds" />
+          </div>
+          <div style={styles.buttonContainer}>
+            <button type="submit" style={styles.submitBtn}>
+              Submit
+            </button>
+            <button type="button" onClick={() => { setSettings(false); }} style={styles.cancelBtn}>
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
     </>
