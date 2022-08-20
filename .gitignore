@@ -1,4 +1,4 @@
 .env
-client/dist/bundle.js
+dist
 .eslintignore
 node_modules
